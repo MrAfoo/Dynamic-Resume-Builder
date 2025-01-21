@@ -28,7 +28,12 @@ A dynamic web-based resume builder that creates professional resumes with real-t
 - HTML2PDF.js
 
 ## Project Structure
-resume-builder/ ├── index.html # Main form page ├── generated.html # Resume preview/export page ├── assets/ │ ├── css/ │ │ └── main.css # Styling │ └── js/ │ ├── script.js # Form handling & preview │ └── app.js # Validation & utilities
+- index.html  (Main form page)
+- generated.html (Resume preview/export page)
+- assets/
+  css/main.css (Styling)
+  js/script.js  (Form handling & preview)
+  app.js (Validation & utilities)
 
 
 ## Core Components
