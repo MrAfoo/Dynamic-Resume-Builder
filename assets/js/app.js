@@ -19,8 +19,7 @@ const validType = {
 let firstnameElem = mainForm.firstname,
     middlenameElem = mainForm.middlename,
     lastnameElem = mainForm.lastname,
-    imageElem = mainForm.image,
-    designationElem = mainForm.designation,
+    imageElem = document.getElementById('image'), 
     addressElem = mainForm.address,
     emailElem = mainForm.email,
     phonenoElem = mainForm.phoneno,
@@ -39,6 +38,26 @@ let nameDsp = document.getElementById('fullname_dsp'),
     skillsDsp = document.getElementById('skills_dsp'),
     educationsDsp = document.getElementById('educations_dsp'),
     experiencesDsp = document.getElementById('experiences_dsp');
+
+    // Add your image handling code here
+    if(imageElem) {
+        imageElem.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if(imageDsp) {
+                        imageDsp.src = e.target.result;
+                    } else {
+                        console.error('Image display element not found');
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    } else {
+        console.error('Image input element not found');
+    }
 
 // first value is for the attributes and second one passes the nodelists
 const fetchValues = (attrs, ...nodeLists) => {
@@ -116,6 +135,8 @@ const getUserInputs = () => {
     projDescriptionElem.forEach(item => item.addEventListener('keyup', (e) => validateFormData(e.target, validType.ANY, 'Description')));
     skillElem.forEach(item => item.addEventListener('keyup', (e) => validateFormData(e.target, validType.ANY, 'skill')));
 
+    const imageElem = document.getElementById('image');
+    imageElem.addEventListener('change', (e) => validateImage(e.target));
     return {
         
             firstname: firstnameElem.value,
@@ -209,21 +230,53 @@ const displayCV = (userData) => {
     showListData(userData.educations, educationsDsp);
     showListData(userData.experiences, experiencesDsp);
 }
-
+function storeImage() {
+    const imageElem = document.getElementById('image');
+    if(imageElem && imageElem.files && imageElem.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Store the image data in localStorage
+            localStorage.setItem('resumeImage', e.target.result);
+        }
+        reader.readAsDataURL(imageElem.files[0]);
+    }
+}
 // generate CV
 const generateCV = () => {
     let userData = getUserInputs();
+    storeImage(); // Add this line to store the image
     displayCV(userData);
-    console.log(userData);
 }
 
-function previewImage(){
-    let oFReader = new FileReader();
-    oFReader.readAsDataURL(imageElem.files[0]);
-    oFReader.onload = function(ofEvent){
-        imageDsp.src = ofEvent.target.result;
+// Add this event listener at the bottom of your file
+if(imageElem) {
+    imageElem.addEventListener('change', previewImage);
+}
+document.getElementById('image').addEventListener('change', previewImage);
+
+function previewImage() {
+    const imageElem = document.getElementById('image');
+    const imageDsp = document.getElementById('image_dsp');
+    
+    if(imageElem && imageDsp) {
+        if(imageElem.files && imageElem.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imageDsp.src = e.target.result;
+            }
+            reader.readAsDataURL(imageElem.files[0]);
+        }
     }
 }
+
+// Add single event listener for image input
+const imageInput = document.getElementById('image');
+if(imageInput) {
+    imageInput.addEventListener('change', previewImage);
+}
+
+
+
 
 // print CV
 function printCV(){

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Preview</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- Copy the exact structure from your main resume preview section -->
+    <section id="preview-sc" class="print_area">
+        <div class="container">
+            <div class="preview-cnt">
+                <div class="preview-cnt-l bg-green text-white">
+                    <img id="image_dsp" src="" alt="Profile Image">
+
+                    <div class="preview-blk">
+                        <div class="preview-item preview-item-name">
+                            <span class="preview-item-val fw-6" id="fullname_dsp"></span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-item-val" id="designation_dsp"></span>
+                        </div>
+                    </div>
+
+                    <div class="preview-blk">
+                        <div class="preview-blk-title">
+                            <h3>contact</h3>
+                        </div>
+                        <div class="preview-blk-list">
+                            <div class="preview-item">
+                                <span class="preview-item-val" id="phoneno_dsp"></span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-item-val" id="email_dsp"></span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-item-val" id="address_dsp"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="preview-blk">
+                        <div class="preview-blk-title">
+                            <h3>skills</h3>
+                        </div>
+                        <div class="preview-blk-list" id="skills_dsp">
+                            <!-- Skills will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-cnt-r bg-white">
+                    <div class="preview-blk">
+                        <div class="preview-blk-title">
+                            <h3>about</h3>
+                        </div>
+                        <div class="preview-blk-list">
+                            <div class="preview-item">
+                                <span class="preview-item-val" id="summary_dsp"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="preview-blk">
+                        <div class="preview-blk-title">
+                            <h3>education</h3>
+                        </div>
+                        <div class="preview-blk-list" id="educations_dsp">
+                            <!-- Education items will be inserted here -->
+                        </div>
+                    </div>
+
+                    <div class="preview-blk">
+                        <div class="preview-blk-title">
+                            <h3>projects</h3>
+                        </div>
+                        <div class="preview-blk-list" id="projects_dsp">
+                            <!-- Projects will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Replace the print button section with this new control panel -->
+<section class="control-panel">
+    <div class="container">
+        <div class="button-group">
+            <button type="button" class="btn btn-primary" onclick="downloadPDF()">
+                <i class="fas fa-download"></i> Download CV
+            </button>
+            <button type="button" class="btn btn-success" onclick="shareCV()">
+                <i class="fas fa-share-alt"></i> Share CV
+            </button>
+            <button type="button" class="btn btn-info" onclick="window.location.href='resume.html'">
+                <i class="fas fa-edit"></i> Update Resume
+            </button>
+        </div>
+    </div>
+</section>
+
+
+    <script>
+       window.onload = function() {
+    try {
+        const resumeData = JSON.parse(localStorage.getItem('resumeData'));
+        const imageData = localStorage.getItem('resumeImage');
+        
+        // Set the image
+        if (imageData) {
+            document.getElementById('image_dsp').src = imageData;
+        }
+
+        if (resumeData) {
+            // Update personal information
+            document.getElementById('fullname_dsp').textContent = 
+                `${resumeData.firstname} ${resumeData.middlename} ${resumeData.lastname}`.trim();
+            document.getElementById('designation_dsp').textContent = resumeData.designation;
+            document.getElementById('phoneno_dsp').textContent = resumeData.phoneno;
+            document.getElementById('email_dsp').textContent = resumeData.email;
+            document.getElementById('address_dsp').textContent = resumeData.address;
+            document.getElementById('summary_dsp').textContent = resumeData.summary;
+
+            // Update education section
+            if (resumeData.education && resumeData.education.length > 0) {
+                const educationHTML = resumeData.education
+                    .map(edu => `
+                        <div class="preview-item">
+                            <span class="preview-item-val">
+                                <h4 class="fw-6">${edu.school}</h4>
+                                <p class="text-grey">${edu.degree}</p>
+                                <p class="text-grey">${edu.city}</p>
+                                <p class="text-grey">${edu.startDate} - ${edu.endDate}</p>
+                                <p>${edu.description}</p>
+                            </span>
+                        </div>
+                    `).join('');
+                document.getElementById('educations_dsp').innerHTML = educationHTML;
+            }
+
+            // Update projects section
+            if (resumeData.projects && resumeData.projects.length > 0) {
+                const projectsHTML = resumeData.projects
+                    .map(proj => `
+                        <div class="preview-item">
+                            <span class="preview-item-val">
+                                <h4 class="fw-6">${proj.title}</h4>
+                                <p><a href="${proj.link}">${proj.link}</a></p>
+                                <p>${proj.description}</p>
+                            </span>
+                        </div>
+                    `).join('');
+                document.getElementById('projects_dsp').innerHTML = projectsHTML;
+            }
+
+            // Update skills section
+            if (resumeData.skills && resumeData.skills.length > 0) {
+                const skillsHTML = resumeData.skills
+                    .map(skill => `
+                        <div class="preview-item">
+                            <span class="preview-item-val">${skill}</span>
+                        </div>
+                    `).join('');
+                document.getElementById('skills_dsp').innerHTML = skillsHTML;
+            }
+        }
+    } catch (error) {
+        console.error('Error loading resume data:', error);
+    }
+};
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function downloadPDF() {
+            const element = document.querySelector('.print_area');
+            const options = {
+                margin: 1,
+                filename: 'my-resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(options).from(element).save();
+        }
+    
+        function shareCV() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Resume',
+                    text: 'Check out my professional resume',
+                    url: window.location.href
+                })
+                .catch(error => console.log('Error sharing:', error));
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const dummy = document.createElement('input');
+                document.body.appendChild(dummy);
+                dummy.value = window.location.href;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+                alert('Resume link copied to clipboard!');
+            }
+        }
+    </script>
+    
+</body>
+</html>
