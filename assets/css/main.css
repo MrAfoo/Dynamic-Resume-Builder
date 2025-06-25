@@ -674,6 +674,43 @@ textarea{
     }
 }
 
+@media screen and (max-width: 767px) {
+  .preview-cnt {
+    display: block; /* or flex-direction: column if using flex */
+  }
+
+  .preview-cnt-l,
+  .preview-cnt-r {
+    padding: 2rem;
+    width: 100%;
+  }
+
+  .preview-cnt-l {
+    text-align: center;
+  }
+
+  .preview-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .preview-item-name {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .preview-btn-cnt {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .preview-btn {
+    width: 80%; /* or 100% for full-width */
+  }
+}
+ 
 @media screen and (min-width: 768px){
     .cols-3{
         grid-template-columns: repeat(3, 1fr);

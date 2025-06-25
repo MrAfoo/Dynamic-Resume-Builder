@@ -197,7 +197,7 @@
                 })
                 .catch(error => console.log('Error sharing:', error));
             } else {
-                // Fallback for browsers that don't support Web Share API
+                
                 const dummy = document.createElement('input');
                 document.body.appendChild(dummy);
                 dummy.value = window.location.href;
