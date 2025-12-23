@@ -23,8 +23,6 @@ A dynamic web-based resume builder that creates professional resumes with real-t
 - HTML5
 - CSS3
 - JavaScript
-- jQuery
-- Form Repeater Plugin
 - HTML2PDF.js
 
 ## Project Structure
