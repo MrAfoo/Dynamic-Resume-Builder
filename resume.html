@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- custom css -->
         <link rel="stylesheet" href="assets/css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     </head>
     <body>
         <nav class = "navbar bg-white">
@@ -311,13 +312,14 @@
                 </div>
             </div>
             <!-- Where your form ends, replace the preview section with this: -->
-        </form>
-        <div class="generate-resume-btn-container" style="text-align: center; margin-top: 20px;">
-            <button type="button" class="btn btn-primary" onclick="openResumePreview()">Generate Resume</button>
+        <div class="generate-resume-btn-container" style="text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary" onclick="openResumePreview()">
+                <i class="fas fa-eye"></i> Preview & Generate Resume
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="clearResumeForm()">
+                <i class="fas fa-trash-alt"></i> Clear Form / Start Fresh
+            </button>
         </div>
-        </div>
-        </div>
-        </section>
 
 <!-- jquery cdn -->
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>

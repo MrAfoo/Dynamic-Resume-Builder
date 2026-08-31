@@ -95,11 +95,14 @@
             <button type="button" class="btn btn-secondary" onclick="window.print()">
                 <i class="fas fa-print"></i> Print CV
             </button>
+            <button type="button" class="btn btn-warning" onclick="window.location.href='resume.html'">
+                <i class="fas fa-edit"></i> Edit Resume
+            </button>
             <button type="button" class="btn btn-success" onclick="shareCV()">
                 <i class="fas fa-share-alt"></i> Share CV
             </button>
-            <button type="button" class="btn btn-info" onclick="window.location.href='resume.html'">
-                <i class="fas fa-edit"></i> Create New Resume
+            <button type="button" class="btn btn-info" onclick="createNewResume()">
+                <i class="fas fa-plus"></i> Start New Resume
             </button>
         </div>
     </div>
@@ -231,6 +234,15 @@
                 document.execCommand('copy');
                 document.body.removeChild(dummy);
                 alert('Resume link copied to clipboard!');
+            }
+        }
+
+        function createNewResume() {
+            if (confirm('Start a new resume? This will clear your current saved data.')) {
+                localStorage.removeItem('resumeData');
+                localStorage.removeItem('formData');
+                localStorage.removeItem('resumeImage');
+                window.location.href = 'resume.html';
             }
         }
     </script>
