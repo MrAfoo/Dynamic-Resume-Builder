@@ -92,6 +92,9 @@
             <button type="button" class="btn btn-primary" onclick="downloadPDF()">
                 <i class="fas fa-download"></i> Download CV
             </button>
+            <button type="button" class="btn btn-secondary" onclick="window.print()">
+                <i class="fas fa-print"></i> Print CV
+            </button>
             <button type="button" class="btn btn-success" onclick="shareCV()">
                 <i class="fas fa-share-alt"></i> Share CV
             </button>
@@ -110,19 +113,23 @@
         const imageData = localStorage.getItem('resumeImage');
         
         // Set the image
-        if (imageData) {
-            document.getElementById('image_dsp').src = imageData;
+        const imgElem = document.getElementById('image_dsp');
+        if (imageData && imageData.trim() !== '') {
+            imgElem.src = imageData;
+            imgElem.style.display = 'block';
+        } else if (imgElem) {
+            imgElem.style.display = 'none';
         }
 
         if (resumeData) {
             // Update personal information
             document.getElementById('fullname_dsp').textContent = 
-                `${resumeData.firstname} ${resumeData.middlename} ${resumeData.lastname}`.trim();
-            document.getElementById('designation_dsp').textContent = resumeData.designation;
-            document.getElementById('phoneno_dsp').textContent = resumeData.phoneno;
-            document.getElementById('email_dsp').textContent = resumeData.email;
-            document.getElementById('address_dsp').textContent = resumeData.address;
-            document.getElementById('summary_dsp').textContent = resumeData.summary;
+                `${resumeData.firstname || ''} ${resumeData.middlename || ''} ${resumeData.lastname || ''}`.trim();
+            document.getElementById('designation_dsp').textContent = resumeData.designation || '';
+            document.getElementById('phoneno_dsp').textContent = resumeData.phoneno || '';
+            document.getElementById('email_dsp').textContent = resumeData.email || '';
+            document.getElementById('address_dsp').textContent = resumeData.address || '';
+            document.getElementById('summary_dsp').textContent = resumeData.summary || '';
 
             // Update education section
             if (resumeData.education && resumeData.education.length > 0) {
@@ -130,11 +137,11 @@
                     .map(edu => `
                         <div class="preview-item">
                             <span class="preview-item-val">
-                                <h4 class="fw-6">${edu.school}</h4>
-                                <p class="text-grey">${edu.degree}</p>
-                                <p class="text-grey">${edu.city}</p>
-                                <p class="text-grey">${edu.startDate} - ${edu.endDate}</p>
-                                <p>${edu.description}</p>
+                                <h4 class="fw-6">${edu.school || ''}</h4>
+                                <p class="text-grey">${edu.degree || ''}</p>
+                                <p class="text-grey">${edu.city || ''}</p>
+                                <p class="text-grey">${edu.startDate || ''} - ${edu.endDate || ''}</p>
+                                <p>${edu.description || ''}</p>
                             </span>
                         </div>
                     `).join('');
@@ -147,9 +154,9 @@
                     .map(proj => `
                         <div class="preview-item">
                             <span class="preview-item-val">
-                                <h4 class="fw-6">${proj.title}</h4>
-                                <p><a href="${proj.link}">${proj.link}</a></p>
-                                <p>${proj.description}</p>
+                                <h4 class="fw-6">${proj.title || ''}</h4>
+                                ${proj.link ? `<p><a href="${proj.link}">${proj.link}</a></p>` : ''}
+                                <p>${proj.description || ''}</p>
                             </span>
                         </div>
                     `).join('');
@@ -159,11 +166,11 @@
             // Update skills section
             if (resumeData.skills && resumeData.skills.length > 0) {
                 const skillsHTML = resumeData.skills
-                    .map(skill => `
+                    .map(skill => skill ? `
                         <div class="preview-item">
                             <span class="preview-item-val">${skill}</span>
                         </div>
-                    `).join('');
+                    ` : '').join('');
                 document.getElementById('skills_dsp').innerHTML = skillsHTML;
             }
         }
@@ -176,16 +183,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         function downloadPDF() {
-            const element = document.querySelector('.print_area');
+            const element = document.querySelector('.preview-cnt');
+            if (!element) {
+                alert('Resume content not found!');
+                return;
+            }
+
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            window.scrollTo(0, 0);
+
             const options = {
-                margin: 1,
+                margin: [0, 0, 0, 0],
                 filename: 'my-resume.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas: { 
+                    scale: 2, 
+                    scrollY: 0,
+                    scrollX: 0,
+                    useCORS: true,
+                    logging: false
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
             
-            html2pdf().set(options).from(element).save();
+            html2pdf().set(options).from(element).save().then(() => {
+                window.scrollTo(0, scrollTop);
+            }).catch(err => {
+                console.error('Error generating PDF:', err);
+                window.scrollTo(0, scrollTop);
+            });
         }
     
         function shareCV() {
@@ -197,7 +224,6 @@
                 })
                 .catch(error => console.log('Error sharing:', error));
             } else {
-                
                 const dummy = document.createElement('input');
                 document.body.appendChild(dummy);
                 dummy.value = window.location.href;

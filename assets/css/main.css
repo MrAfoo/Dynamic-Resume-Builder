@@ -570,12 +570,16 @@ textarea{
 .preview-cnt {
     display: flex;
     min-height: 1000px;
+    width: 100%;
+    background-color: #ffffff;
 }
 
 /* Left side styling */
 .preview-cnt-l {
     padding: 30px;
     position: relative;
+    width: 32%;
+    flex: 0 0 32%;
 }
 
 #image_dsp {
@@ -591,6 +595,8 @@ textarea{
 /* Right side content styling */
 .preview-cnt-r {
     padding: 40px;
+    width: 68%;
+    flex: 0 0 68%;
 }
 
 /* Section titles */
@@ -665,12 +671,12 @@ textarea{
 
 /* Hide print button when printing */
 @media print {
-    .print-btn-sc {
-        display: none;
+    .print-btn-sc, .control-panel {
+        display: none !important;
     }
     .print_area {
-        margin: 0;
-        box-shadow: none;
+        margin: 0 !important;
+        box-shadow: none !important;
     }
 }
 
@@ -683,6 +689,7 @@ textarea{
   .preview-cnt-r {
     padding: 2rem;
     width: 100%;
+    flex: 0 0 100%;
   }
 
   .preview-cnt-l {
@@ -741,8 +748,8 @@ textarea{
         visibility: hidden;
     }
 
-    .non_print_area{
-        display: none;
+    .non_print_area, .control-panel{
+        display: none !important;
     }
 
     .print_area, .print_area *{
@@ -754,6 +761,5 @@ textarea{
         position: absolute;
         left: 0;
         top: 0;
-        overflow: hidden;
     }
 }
