@@ -203,6 +203,20 @@ a{
     border-color: #d39e00;
 }
 
+.click-here-link {
+    color: #1A91F0;
+    text-decoration: underline;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+    transition: color 0.2s ease;
+}
+.click-here-link:hover {
+    color: #1170CD;
+}
+
 .btn-group button:first-child, .btn-group a:first-child{
     margin-right: 1rem!important;
 }

@@ -124,6 +124,15 @@
             imgElem.style.display = 'none';
         }
 
+        function formatUrl(url) {
+            if (!url) return '';
+            url = url.trim();
+            if (!/^https?:\/\//i.test(url)) {
+                return 'https://' + url;
+            }
+            return url;
+        }
+
         if (resumeData) {
             // Update personal information
             document.getElementById('fullname_dsp').textContent = 
@@ -158,7 +167,7 @@
                         <div class="preview-item">
                             <span class="preview-item-val">
                                 <h4 class="fw-6">${proj.title || ''}</h4>
-                                ${proj.link ? `<p><a href="${proj.link}">${proj.link}</a></p>` : ''}
+                                ${proj.link ? `<p><a href="${formatUrl(proj.link)}" target="_blank" rel="noopener noreferrer" class="click-here-link"><i class="fas fa-external-link-alt"></i> Click Here</a></p>` : ''}
                                 <p>${proj.description || ''}</p>
                             </span>
                         </div>
